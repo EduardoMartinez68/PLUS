@@ -1,13 +1,13 @@
 //character of the app
-const appName='Punto de venta'
+const appName='Provedores'
 const permissions={
-    'see':"app_point_sales",
+    'see':"view_provider",
     'add':"addUser",
     'edit':"editUser",
     'delete':"deleteUser"
 }
 
-const link='point-sales'
+const link='products'
 
 //link of the web:path view in the folder views
 const linksIsLoggedIn={
@@ -18,7 +18,7 @@ const linksIsLoggedIn={
 const path = require('path');
 const pathApp= __dirname;
 
-const icon = 'point_sales.webp'
+const icon = 'providers.webp'
 
 //this is because if the programmer need this data
 module.exports = { 

@@ -2,6 +2,7 @@ const system=require('./lib/system');
 
 //----------------------desktop application
 //const { app, BrowserWindow } = require('electron');
+//npx nodemon app.js
 
 
 //----------------------server application

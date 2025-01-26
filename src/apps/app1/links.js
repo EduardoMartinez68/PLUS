@@ -9,15 +9,14 @@ const apps=require('../../lib/app.js');
 //this is for get the name of the folder for show his views
 const path = require('path');
 const nameApp=path.basename(__dirname); //get the name of the folder
-
+const pathFile=`../apps/${nameApp}`
 
 
 
 //*-----------------------------------------------------------routes-----------------------------------------//
 router.get('/home-app1', (req, res) => {
-    const myApps=apps.get_all_my_apps();
-
-    res.render(`../apps/${nameApp}/views/table`,{myApps});
+    const myApps=apps.get_all_my_apps(req.user);
+    res.render(`${pathFile}/views/table`,{myApps});
 })
 
 

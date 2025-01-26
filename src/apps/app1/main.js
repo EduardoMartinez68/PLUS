@@ -1,10 +1,11 @@
 //character of the app
 const appName='App'
-const permissions=[
-    "addUser",
-    "editUser",
-    "deleteUser"
-]
+const permissions={
+    'see':"app_point_sales",
+    'add':"addUser",
+    'edit':"editUser",
+    'delete':"deleteUser"
+}
 
 const link='products'
 

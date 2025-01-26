@@ -4,12 +4,7 @@ const system=require('../lib/system');
 
 router.get('/',(req,res)=>{
     //we will see if the user have the app desktop 
-    if(system=='desktop'){
-        res.redirect('/links/home');
-    }
-    else{
-        res.render('links/web/prices');
-    }
+    res.render('links/login/login');
 })
 
 module.exports=router;

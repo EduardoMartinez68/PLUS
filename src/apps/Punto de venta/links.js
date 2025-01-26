@@ -15,7 +15,7 @@ const nameApp=path.basename(__dirname); //get the name of the folder
 
 //*-----------------------------------------------------------routes-----------------------------------------//
 router.get('/home-app2', (req, res) => {
-    const myApps=apps.get_all_my_apps();
+    const myApps=apps.get_all_my_apps(req.user);
 
     res.render(`../apps/${nameApp}/views/table`,{myApps});
 })
