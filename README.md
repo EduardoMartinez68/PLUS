@@ -1,9 +1,12 @@
-# Füd - Point of Sale System for Franchises and Restaurants
-Welcome to Füd, your all-in-one solution for point of sale management in the restaurant industry! This SAAS software is specifically designed for franchises and restaurants seeking a robust and efficient platform to streamline their operations.
+# PLUS 🚀 - ERP, CRM and Point of Sale System for Pymes
+Welcome to {ED} Plus, your all-in-one solution for your company! This SAAS software is specifically designed for Pymes. PLUS is a suite of web based open source business apps.
+
+PLUS Apps can be used as stand-alone applications, but they also integrate seamlessly so you get a full-featured Open Source ERP when you install several Apps.
+
 ![Füd Logo](/FUD.png)
 
 ## Key Features
--**Multi-Restaurant Management:** Füd allows you to manage multiple restaurants from a single platform, simplifying operations and centralizing information.
+-**Multi-Restaurant Management:** PLUS allows you to manage multiple restaurants from a single platform, simplifying operations and centralizing information.
 
 -**Custom Users and Roles:** Control access and permissions for each user based on their role, providing security and efficiency in day-to-day operations.
 
@@ -45,7 +48,7 @@ The dashboard includes the creation of supplies, products, employees, clients, c
 
 
 ## Contributions
-Contributions are welcome! If you encounter any issues or have ideas to enhance Füd, please create an issue or submit a pull request.
+Contributions are welcome! If you encounter any issues or have ideas to enhance PLUS, please create an issue or submit a pull request.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for more details.
