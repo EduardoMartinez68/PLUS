@@ -1,0 +1,46 @@
+<!-- Navbar -->
+<input type="hidden" value="{{user.email}}" id="userIdChat">
+<div class="navbar-message">
+  <div class="icons" id="icons-message-history">
+    <i class="fi fi-ss-comments" id="chatIcon"></i>
+  </div>
+</div>
+
+<!-- this is for get the data of the company-->
+{{#each branchFree}}
+  <input type="hidden" value="{{id_companies}}" id="id-company-ed-clouded">
+{{/each}}
+{{#each branch}}
+  <input type="hidden" value="{{id_companies}}" id="id-company-ed-clouded">
+{{/each}}
+{{#each company}}
+  <input type="hidden" value="{{id}}" id="id-company-ed-clouded">
+{{/each}}
+
+
+<!-- Chat History -->
+<div class="chat-history" id="chatHistory">
+  <h3></h3>
+  <div class="container-button-chat">
+    <button class="btn" onclick="show_send_message_to_user()"><i class="fi fi-rs-paper-plane"></i> Nuevo mensaje</button>
+  </div>
+  {{#each messages}}
+    <div class="message">
+      <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="" class="chat-history-image-profile">
+      <div class="message-content">
+        <label for="" class="chat-name">Usuario</label>
+        <p>Mensaje 1: Hola</p>
+      </div>
+    </div>
+  {{/each}}
+  <div class="view-all-messages">
+    <center><a href="#">Ver todos los mensajes</a></center>
+  </div>
+</div>
+
+
+<!--
+this is for when the user can get messages
+<script src="/js/desktop/socket.io.min.js"></script>
+<script src="/js/navbarMessageHistory.js"></script>
+--->

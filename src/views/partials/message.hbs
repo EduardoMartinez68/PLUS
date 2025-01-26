@@ -1,0 +1,32 @@
+{{#if success}}
+    <div class="container container-message">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <center>
+                        {{success}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}
+
+{{#if message}}
+    <div class="container container-message">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <center>
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}
+
+<script src="/js/desktop/jquery.min.js"></script>
+<script src="/js/desktop/bootstrap.bundle.min.js"></script>
