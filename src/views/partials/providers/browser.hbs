@@ -1,0 +1,25 @@
+<div class="container">
+    <label>Buscar proveedores</label>
+    <div class="row">
+        <div class="col-sm-5">
+            <input type="text" class="form-control" placeholder="Buscar por nombre..." id="search">
+        </div>
+        {{#each company}}
+            <div class="col">
+                <button class="btn btn-confirm-message" onclick="nextWeb('{{id}}/add-providers')">Agregar provedor +</button>
+            </div>
+        {{/each}}
+        {{#each branch}}
+            <div class="col">
+                <button class="btn btn-confirm-message" onclick="nextWeb('{{id_companies}}/{{id}}/add-providers')">Agregar provedor +</button>
+            </div>
+        {{/each}}
+        {{#each branchFree}}
+            <div class="col">
+                <button class="btn btn-confirm-message" onclick="nextWeb('{{id_companies}}/{{id}}/add-providers')">Agregar provedor +</button>
+            </div>
+        {{/each}}
+    </div>
+</div>
+<br>
+<script src="/js/search.js"></script>

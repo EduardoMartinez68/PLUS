@@ -14,12 +14,13 @@ const pathFile=`../apps/${nameApp}`
 //*-----my permission---//
 const {
     this_user_have_this_permission
-} = require('../../lib/permission');
-const { isLoggedIn, isNotLoggedIn } = require('../../lib/auth');
+} = require('../../lib/permission.js');
+const { isLoggedIn, isNotLoggedIn } = require('../../lib/auth.js');
 
+//*-----function of branch---//
 const{
     get_data_branch
-}=require('../../services/branch');
+}=require('../../services/branch.js');
 
 //*-----my scripts---//
 const{
@@ -29,7 +30,9 @@ const{
     search_all_providers_for_name,
     search_provider,
     delete_provider
-}= require('./services/providers');
+}= require('./services/providers.js');
+
+const rolFree=0;
 
 //*-----------------------------------------------------------routes-----------------------------------------//
 router.get('/:id_company/:id_branch/providers', isLoggedIn, async (req, res) => {
@@ -42,16 +45,11 @@ router.get('/:id_company/:id_branch/providers', isLoggedIn, async (req, res) => 
         return res.redirect(`/links/${id_company}/${id_branch}/permission_denied`);
     }
 
-    const providers = await search_all_providers(id_company);
+    const providers = await search_providers(id_branch);
+    const branchFree = await get_data_branch(id_branch);
+    const myApps=apps.get_all_my_apps(req.user);
 
-    //if the company not have providers render other view
-    if (providers.length == 0) {
-        const branchFree=await get_data_branch(id_branch);
-        res.render('links/manager/providers/providers', { branchFree });
-    }
-    else {
-        res.render('links/manager/providers/providers', { branchFree, providers });
-    }
+    res.render(`${pathFile}/views/providers`,{branchFree, myApps, providers});
 })
 
 router.get('/:id_company/:name_provider/search-provider', isLoggedIn, async (req, res) => {
@@ -141,6 +139,25 @@ router.get('/:id_company/:id_branch/:id_provider/delete-provider', isLoggedIn, a
     }else{
         res.redirect(`/fud/${id_company}/${id_branch}/providers`);
     }
+})
+
+
+//-----banch Free
+router.get('/:id_company/:id_branch/add-providers', isLoggedIn, async (req, res) => {
+    
+    const { id_company, id_branch} = req.params;
+
+    //we will see if the user have the permission for this App.
+    if(!this_user_have_this_permission(req.user,id_company, id_branch,'add_provider')){
+        req.flash('message', 'Lo siento, no tienes permiso para esta acción 😅');
+        return res.redirect(`/links/${id_company}/${id_branch}/permission_denied`);
+    }
+
+    const myApps=apps.get_all_my_apps(req.user);
+
+    //we will see if the user is use ed one
+    const branchFree = await get_data_branch(id_branch);
+    res.render(`${pathFile}/views/addProviders`, { branchFree, myApps});
 })
 
 

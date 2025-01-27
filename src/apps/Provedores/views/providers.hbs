@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="/css/manager/employee/employee.css">
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <label class="form-group sub-title"><i class="fi-icon fi-ss-truck-side"></i> Provedores</label><hr>
+
+            <!--we will see if exist providers in the database-->
+            {{#if providers}}
+                {{>providers/browser}}
+                {{>providers/table}}
+            {{else}}
+                <!--if not exist providers in the database, show a message for that the user add his first providers-->
+                <center>
+                    <label for="">¡Oops! Parece que aún no tienes proveedores registrados 😔</label>
+                    <br>
+                    <img src="/img/icons_first/notfile.webp" alt="">
+                    {{#each branchFree}}
+                        <div class="col">
+                            <button class="btn btn-edit" onclick="nextWeb('{{id_companies}}/{{id}}/add-providers')">Agregar provedor +</button>
+                        </div>
+                    {{/each}}
+                </center>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+
