@@ -154,7 +154,7 @@ router.get('/:id_company/:id_branch/add-providers', isLoggedIn, async (req, res)
     }
 
     const myApps=apps.get_all_my_apps(req.user);
-
+    get_all_the_products_of_the_store
     //we will see if the user is use ed one
     const branchFree = await get_data_branch(id_branch);
     res.render(`${pathFile}/views/addProviders`, { branchFree, myApps});

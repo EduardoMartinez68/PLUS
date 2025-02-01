@@ -42,9 +42,9 @@ router.get('/app/:id_app', (req, res) => {
         //we will see if the user have the permission for show the app
         const idCompany=req.user['id_company'];
         const idBranch=req.user['id_branch'];
-        
+
         //redirect to the user to the home of the app
-        res.redirect(`/links/${idCompany}/${idBranch}/providers`);
+        res.redirect(`/links/${idCompany}/${idBranch}/${appData.link}`);
     } else {
         //if not exist the app we will show a message of error
         req.flash('message','La app que intentas acceder no existe en tu base de datos. 😅')
