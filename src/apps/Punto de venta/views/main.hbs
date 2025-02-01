@@ -29,6 +29,9 @@
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: 20px;
+
+        max-height: 100%;
+        overflow-y: auto;
     }
 
     .product-card-point-of-sales {
@@ -175,22 +178,13 @@
     }
 
     @media (max-width: 1200px) {
-        .container-point-of-sales {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .menu-point-of-sales {
-            width: 100%;
-            margin-bottom: 30px;
-        }
-
-        .cart-point-of-sales {
-            width: 100%;
-        }
-
         .product-cards-point-of-sales {
             grid-template-columns: repeat(3, 1fr);
+        }
+
+        .cart-items-point-of-sales {
+            max-height: 45%;
+            overflow-y: auto;
         }
     }
 
@@ -220,6 +214,7 @@
 
 <!---->
 <div class="container-point-of-sales">
+    
     <!-- Menú de Compras (Izquierda) -->
     <div class="menu-point-of-sales">
         <div class="product-cards-point-of-sales">
@@ -362,11 +357,16 @@
         }
     }
 
-    function removeItem(barcode) {
-        const index = cartItems.findIndex(item => item.barcode === barcode);
-        if (index !== -1) {
-            cartItems.splice(index, 1);
-            updateCart();
+    async function removeItem(barcode) {
+        //her we will see if the user would like delete the product
+        if (await questionMessage('Eliminar Producto 🤔', '¿Estás seguro de querer eliminar este producto?')) {
+            //if the user would like delete the product, we will delete the product
+            const index = cartItems.findIndex(item => item.barcode === barcode);
+            if (index !== -1) {
+                cartItems.splice(index, 1);
+                updateCart();
+            }
+            notificationMessage('Producto eliminado 👍', 'El Producto fue eliminado correctamente')
         }
     }
 
