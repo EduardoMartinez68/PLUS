@@ -1,21 +1,48 @@
 const cartItems = [];
 let cartTotal = 0;
 
-function addToCart(img, name, barcode, price, purchaseUnit) {
+async function addToCart(img, name, barcode, price, purchaseUnit, this_product_is_sold_in_bulk) {
     const existingItem = cartItems.find(item => item.barcode === barcode);
     if (existingItem) {
-        existingItem.quantity += 1;
+        //we will see if the product is sold in bulk
+        if(this_product_is_sold_in_bulk=='true'){
+            //update the cant of the product in the scale 
+            document.getElementById('scales-store-weight-input').value=existingItem.quantity;
+            update_weight_of_the_scale();
+
+            //get the new cant that the user would like buy
+            let quantityForSales=await open_ui_weight_scale(barcode, name, price, 0, 0, 1);
+
+            //we will see if the user delete the product
+            if(quantityForSales<=0){
+                await removeItem(barcodeEditProduct);
+            }
+            else{
+                existingItem.quantity = quantityForSales; //update the product in the cart
+            }
+        }else{
+            existingItem.quantity += 1; //update the product in the cart
+        }
 
         notificationMessage(`${existingItem.name} fue agregado ❤️`, 'El Producto fue agregado correctamente');
     } else {
+        let quantityForSales=1; //this is for the product that are sale for unit
+
+        //we will see if the product is sold in bulk
+        if(this_product_is_sold_in_bulk=='true'){
+            //if the product is sould in bulk, we will ask the user the quantity of the product
+            quantityForSales=await open_ui_weight_scale(barcode, name, price, 0, 0, 1);
+        }
+
         cartItems.push({
             img: document.getElementById(img).src,
             name,
             barcode,
             price,
-            quantity: 1,
+            quantity: quantityForSales,
             discount: 0,
-            purchaseUnit
+            purchaseUnit,
+            this_product_is_sold_in_bulk:this_product_is_sold_in_bulk
         });
 
         notificationMessage(`${name} fue agregado ❤️`, 'El Producto fue agregado correctamente');

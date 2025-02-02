@@ -217,48 +217,48 @@
     }
 </style>
 <div class="popup-overlay" id="popupOverlay">
-<div class="popup" id="popup">
-    <button class="button-pop-sales close-btn" onclick="closePopSales()">&times;</button>
-    <div class="left-panel">
-        <div class="buttons-container">
-            <button class="button-pop-sales quick-amount-btn" onclick="setAmount(20)">$20</button>
-            <button class="button-pop-sales quick-amount-btn" onclick="setAmount(100)">$100</button>
-            <button class="button-pop-sales quick-amount-btn" onclick="setAmount(200)">$200</button>
+    <div class="popup" id="popup">
+        <button class="button-pop-sales close-btn" onclick="closePopSales()">&times;</button>
+        <div class="left-panel">
+            <div class="buttons-container">
+                <button class="button-pop-sales quick-amount-btn" onclick="setAmount(20)">$20</button>
+                <button class="button-pop-sales quick-amount-btn" onclick="setAmount(100)">$100</button>
+                <button class="button-pop-sales quick-amount-btn" onclick="setAmount(200)">$200</button>
+            </div>
+            <br>
+            <div class="buttons-container">
+                <button class="button-pop-sales  num-btn" onclick="addNumber(1)">1</button>
+                <button class="button-pop-sales  num-btn" onclick="addNumber(2)">2</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(3)">3</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(4)">4</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(5)">5</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(6)">6</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(7)">7</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(8)">8</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(9)">9</button>
+                <button class="button-pop-sales delete-btn" onclick="deleteNumber()">⌫</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber(0)">0</button>
+                <button class="button-pop-sales num-btn" onclick="addNumber('.')">.</button>
+            </div>
         </div>
-        <br>
-        <div class="buttons-container">
-            <button class="button-pop-sales  num-btn" onclick="addNumber(1)">1</button>
-            <button class="button-pop-sales  num-btn" onclick="addNumber(2)">2</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(3)">3</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(4)">4</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(5)">5</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(6)">6</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(7)">7</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(8)">8</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(9)">9</button>
-            <button class="button-pop-sales delete-btn" onclick="deleteNumber()">⌫</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber(0)">0</button>
-            <button class="button-pop-sales num-btn" onclick="addNumber('.')">.</button>
+        <div class="right-panel">
+            <h2>Total: $<span id="total">35000</span></h2>
+            <p class="total-text" id="total-text">number</p>
+            <div class="input-container">
+                <label for="">Efectivo</label>
+                <input type="text" id="cash" placeholder="Efectivo" onfocus="setSelected(this)" oninput="calculateChange()"
+                    class="input-pop-sales">
+                <label for="">Tarjeta de Crédito</label>
+                <input type="text" id="credit" placeholder="Tarjeta de Crédito" onfocus="setSelected(this)"
+                    oninput="calculateChange()" class="input-pop-sales">
+                <label for="">Tarjeta de Débito</label>
+                <input type="text" id="debit" placeholder="Tarjeta de Débito" onfocus="setSelected(this)"
+                    oninput="calculateChange()" class="input-pop-sales">
+            </div>
+            <p class="change" id="change">Cambio: $0.00</p>
+            <button class="button-pop-sales pay-btn">Cobrar</button>
         </div>
     </div>
-    <div class="right-panel">
-        <h2>Total: $<span id="total">35000</span></h2>
-        <p class="total-text" id="total-text">number</p>
-        <div class="input-container">
-            <label for="">Efectivo</label>
-            <input type="text" id="cash" placeholder="Efectivo" onfocus="setSelected(this)" oninput="calculateChange()"
-                class="input-pop-sales">
-            <label for="">Tarjeta de Crédito</label>
-            <input type="text" id="credit" placeholder="Tarjeta de Crédito" onfocus="setSelected(this)"
-                oninput="calculateChange()" class="input-pop-sales">
-            <label for="">Tarjeta de Débito</label>
-            <input type="text" id="debit" placeholder="Tarjeta de Débito" onfocus="setSelected(this)"
-                oninput="calculateChange()" class="input-pop-sales">
-        </div>
-        <p class="change" id="change">Cambio: $0.00</p>
-        <button class="button-pop-sales pay-btn">Cobrar</button>
-    </div>
-</div>
 </div>
 
 <script>
