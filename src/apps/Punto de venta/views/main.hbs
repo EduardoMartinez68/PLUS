@@ -1,6 +1,6 @@
 <link rel='stylesheet' href='/css/desktop/uicons-solid-rounded.css'>
-<link rel="stylesheet" href="/css/point-of-sales/cart.css">
-<link rel="stylesheet" href="/css/point-of-sales/messagePop.css">
+<link rel="stylesheet" href="/css/point of sales/cart.css">
+<link rel="stylesheet" href="/css/point of sales/messagePop.css">
 
 <!--this is for get all the data of the company when the user printer the ticket-->
 {{#each dataCompany}}
@@ -9,355 +9,30 @@
 {{/each}}
 
 
-<!---->
+<!--this is the container of the point of sale-->
 <div class="container-point-of-sales">
-
     <!-- menu (left) -->
-    <div class="menu-point-of-sales">
-        <div class="product-cards-point-of-sales">
-            <!-- her we will read all the information of the products and we will print the information in the screen-->
-            {{#each products}}
-                <div class="product-card-point-of-sales"
-                    onclick="addToCart('product-{{id}}','{{name}}', '{{barcode}}', {{price_1}},'{{purchase_unit}}')"
-                    id="{{barcode}}" id-product="{{id}}" data-price-1='{{price_1}}' data-price-2="{{price_2}}"
-                    data-price-3="{{price_3}}" purchase_unit="{{purchase_unit}}">
-                    <img src="{{img}}" alt="Producto 1" id="product-{{id}}">
-                    <br>
-                    <label for="" class="card-text">${{price_1}}</label>
-                    <div class="product-name-point-of-sales">{{name}}</div>
-                    <div class="product-barcode-point-of-sales">{{barcode}}</div>
-                    <input type="hidden" class="this_product_is_sold_in_bulk" value="{{this_product_is_sold_in_bulk}}">
-                </div>
-            {{/each}}
-        </div>
-    </div>
+    {{>point-of-sales/menu}}
 
     <!-- shopping cart (right) -->
-    <div class="cart-point-of-sales">
-
-        <!--this is for create the select of the printer and for create the select of the options--->
-        <div class="row">
-            <div class="col-6">
-                <label for="">Impresora</label>
-                <select name="" id="dataPrinter" class="form-select">
-                    <option value="">No imprimir Ticket</option>
-                    {{#each boxes}}
-                    <option value="{{ip_printer}}">{{num_box}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            <div class="col-6">
-                <label for=""></label>
-                <div class="dropdown">
-                    <button class="btn btn-primary button-spacing dropdown-toggle" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Funciones
-                    </button>
-                    <ul class="dropdown-menu">
-                        {{#each dataEmployee}}
-                        <input type="text" value="{{id_branches}}" style="display: none;" id="id_branch">
-                        <li class="li-link"><a class="dropdown-item" id="emailClient" email="" idClient="null"
-                                onclick="select_customer('{{id_companies}}')"><i class="fi-icon fi-sr-following"></i>
-                                Buscar Cliente</a></li>
-                        <li class="li-link"><a class="dropdown-item" onclick="create_new_order()"><i
-                                    class="fi-icon fi-br-biking-mountain"></i> Delivery</a></li>
-                        <li class="li-link"><a class="dropdown-item"
-                                onclick="cash_movement('{{id}}','{{id_branches}}')"><i
-                                    class="fi-icon fi-sr-hand-holding-usd"></i> Movimiento de caja</a></li>
-                        {{/each}}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <br>
-
-        <!--this is the search of the menu--->
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Escribe un código de barras..." id="search" autofocus
-                name="usernameSearch">
-            <i class="fi fi-br-search search-icon"></i>
-        </div>
-        <br>
-
-        <!-- shopping cart -->
-        <div class="cart-items-point-of-sales" id="cart-items">
-
-        </div>
-
-
-        <div class="cart-total-point-of-sales">
-            <h6>Total de productos: <span id="products-total">0</span></h6>
-            <p>Total del Carrito: <span id="cart-total">0.00</span></p>
-            <button class="btn-buy-point-of-sales" onclick="buyItems()">Comprar</button>
-        </div>
-    </div>
+    {{>point-of-sales/shoppingCart}}
 </div>
 
-<!--this is for show a message pop for edit the price, cant. or discount--->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeModal()">✕</button>
-        <h2>Editar Cantidad</h2>
-        <div class="quantity-container">
-            <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
-            <input type="text" id="quantity" value="1" readonly>
-            <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
-        </div>
-        <button class="update-btn" onclick="updateQuantity()">Actualizar</button>
-    </div>
-</div>
+{{>point-of-sales/messagePop}}
+
+<!--SHOOPING CART--->
+<script src="/js/point of sale/shoppingCart.js"></script>
+<script src="/js/point of sale/editCantOfProductShoppingCart.js"></script>
+<script src="/js/point of sale/searchMenu.js"></script>
 
 
-<script>
-    const cartItems = [];
-    let cartTotal = 0;
+<!---js for print tickets--->
+<script src="/js/point of sale/JQuery.js"></script>
+<script src="/js/point of sale/escops.js"></script>
+<script src="/js/point of sale/tickets.js"></script>
 
-    function addToCart(img, name, barcode, price, purchaseUnit) {
-        const existingItem = cartItems.find(item => item.barcode === barcode);
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cartItems.push({
-                img: document.getElementById(img).src,
-                name,
-                barcode,
-                price,
-                quantity: 1,
-                discount: 0,
-                purchaseUnit
-            });
-        }
-        updateCart();
-    }
-
-    function updateCart() {
-        const cartItemsContainer = document.getElementById('cart-items');
-        cartItemsContainer.innerHTML = '';
-
-        cartItems.forEach(item => {
-            const itemTotal = (item.price - item.discount) * item.quantity;
-            cartItemsContainer.innerHTML += `
-                <div class="cart-item-point-of-sales">
-                    <img src="${item.img}" alt="${item.name}">
-                    <div class="cart-item-info-point-of-sales">
-                    <div class="cart-item-name-point-of-sales">${item.name}</div>
-                    <div class="cart-item-barcode-point-of-sales">Código: ${item.barcode}</div>
-                    Cant.
-                    <input type="button" class="cart-item-quantity-point-of-sales" value="${item.quantity}" onclick="editCant(this,'${item.barcode}')" onchange="updateItemQuantity('${item.barcode}', this.value)"> ${item.purchaseUnit}
-                    <br>
-                    Desc.
-                    <input type="button" class="cart-item-discount-point-of-sales" value="${item.discount}" onchange="updateItemDiscount('${item.barcode}', this.value)">
-                    <div class="cart-item-price-point-of-sales">Precio: $${item.price.toFixed(2)}</div> 
-                    <div class="cart-item-total-point-of-sales">Total: $${itemTotal.toFixed(2)}</div>
-                    </div>
-                    <button class="cart-item-remove-point-of-sales" onclick="removeItem('${item.barcode}')">X</button>
-                </div>
-            `;
-        });
-
-        //her we update the price of the shopping cart
-        cartTotal = cartItems.reduce((total, item) => total + (item.price - item.discount) * item.quantity, 0);
-        document.getElementById('cart-total').textContent = cartTotal.toFixed(2);
-
-        //her we update the number of product that exist in the shopping cart
-        document.getElementById('products-total').textContent = cartItems.length;
-    }
-
-    function updateItemQuantity(barcode, quantity) {
-        const item = cartItems.find(item => item.barcode === barcode);
-        if (item) {
-            item.quantity = parseInt(quantity);
-            updateCart();
-        }
-    }
-
-    function updateItemDiscount(barcode, discount) {
-        const item = cartItems.find(item => item.barcode === barcode);
-        if (item) {
-            item.discount = parseFloat(discount);
-            updateCart();
-        }
-    }
-
-    async function removeItem(barcode) {
-        //her we will see if the user would like delete the product
-        if (await questionMessage('Eliminar Producto 🤔', '¿Estás seguro de querer eliminar este producto?')) {
-            //if the user would like delete the product, we will delete the product
-            const index = cartItems.findIndex(item => item.barcode === barcode);
-            if (index !== -1) {
-                cartItems.splice(index, 1);
-                updateCart();
-            }
-            notificationMessage('Producto eliminado 👍', 'El Producto fue eliminado correctamente')
-        }
-    }
-
-    function buyItems() {
-        alert('Compra realizada con éxito');
-        cartItems.length = 0; // Limpiar carrito
-        updateCart();
-    }
-
-
-</script>
-
-<script>
-    let quantity = 1; // Valor inicial de cantidad
-    let buttonEditProduct=null;
-    let barcodeEditProduct=null;
-
-    function editCant(button,barcode) {
-        buttonEditProduct=button; //her we will save the button that the user did click for edit his cant after
-        barcodeEditProduct=barcode; //her we will save the barcode of the product that the user would like edit his cant
-        quantity=parseInt(buttonEditProduct.value); //we will save the cant of the product that the user would like edit;
-        
-        //her we will show the modal for edit the cant of the product
-        document.getElementById("modal").style.display = "flex";
-        document.getElementById("quantity").value = quantity;
-    }
-
-    function closeModal() {
-        quantity=1; //reset the value of the quantity
-        document.getElementById("modal").style.display = "none";
-    }
-
-    function changeQuantity(change) {
-        quantity += change;
-        if (quantity < 0) quantity = 0; //Avoid amounts less than 1
-        document.getElementById("quantity").value = quantity; //update the value of the quantity
-    }
-
-    async function updateQuantity() {
-        //we will see if exist a button that the user did click for edit the cant of the product
-        if(buttonEditProduct!=null){
-            //we will see if the quantity is equal to cero for know if the user would like delete the product
-            if(quantity<=0){
-                await removeItem(barcodeEditProduct); //her we will see if the user would like delete the product
-            }
-            else{
-                //if the cant that the user would like edit is different to cero, we will update the cant of the product in the list of the shopping car
-                const existingItem = cartItems.find(item => item.barcode === barcodeEditProduct); //get the product in the list of the shopping cart
-                existingItem.quantity = quantity; //update the cant of the product
-
-                //reset the variable 
-                buttonEditProduct=null; 
-                barcodeEditProduct=null;
-
-                //update the shopping cart and the prices
-                updateCart(); 
-            }
-        }
-
-        closeModal();
-    }
-
-
-    closeModal();
-</script>
 
 <!------------------------->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('search');
-        const cards = document.querySelectorAll('.product-card-point-of-sales');
-
-        //this is for the search in cellphone
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.toLowerCase();
-            cards.forEach(card => {
-                const barcode = card.id.toLowerCase();
-                if (barcode.includes(query) || query === '') {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-
-        //we will see if the user did enter and the input
-        searchInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                //we will see the barcode that the user would like search
-                const valueInputBarcode = searchInput.value.toLowerCase();
-                let barcodeInput = valueInputBarcode; //save the barcode that the user would like search
-
-                /*
-                ----now this is for know if the user write a barcode and a number----
-                        example: milk*10
-                */
-                // Expression regular for know the format "text*number"
-                const match = valueInputBarcode.split('*') //valueInputBarcode.match(/(.+)\*(\d+)$/);
-                let repeatCount = 1; // value predetermined
-
-                //we will see if exist a cant that the user would add to the card
-                if (match) {
-                    barcodeInput = match[0]; // Extract the text before that the asterisk 
-
-                    //we will see if exist a cant that the user would add to the card
-                    const cant = match[1];
-                    if (cant) {
-                        repeatCount = parseInt(match[1], 10); //Extract and convert the number after the asterisk
-                    }
-                }
-
-
-                //now we will to search the product that the user need add to the card
-                let cardProduct = null;
-
-                //we will to read all the card of the menu
-                cards.forEach(card => {
-                    const barcode = card.id.toLowerCase();
-                    card.style.display = ''; //show all the card
-
-                    //if we found the product, save his exist 
-                    if (barcode == barcodeInput) {
-                        cardProduct = card;
-                    }
-                });
-
-                //we will see if we found the products for add to the card
-                if (cardProduct) {
-                    // get all the data that need for add the product to the card
-                    const productId = cardProduct.getAttribute('id-product');
-                    const productName = cardProduct.querySelector('.product-name-point-of-sales').textContent.trim();
-                    const purchaseUnit = cardProduct.getAttribute('purchase_unit');
-                    const productPrice1 = parseFloat(cardProduct.querySelector('.card-text').textContent.trim().replace('$', '').replace(',', ''));
-                    const productPrice2 = cardProduct.getAttribute('data-price-2') || '0';
-                    const productPrice3 = cardProduct.getAttribute('data-price-3') || '0';
-                    const typeProduct = cardProduct.querySelector('.this_product_is_sold_in_bulk').value || 'false';
-
-                    //we will see if the product that the user would like add to the card is a product is sold in bulk
-                    if (typeProduct == 'true') {
-                        // call to the function addFish with the product data
-                        //addFish(productId, productName, productPrice1, productPrice2, productPrice3,typeProduct);
-
-                        addToCart('product-' + productId, productName, barcodeInput, productPrice1);
-
-                        //update the cant in the scale
-                        repeatCount = parseFloat(match[1], 10); //this is for get decimals
-                        document.getElementById('scales-store-weight-input').value = repeatCount;
-                        update_weight_of_the_scale();
-                    } else {
-                        //if exist a cant that the user would add of the product, we use a loop "for" for add the product to the card
-                        for (let i = 0; i < repeatCount; i++) {
-                            // call to the function addFish with the product data
-                            //addFish(productId, productName, productPrice1, productPrice2, productPrice3,typeProduct);
-
-                            const idImagen = 'product-' + productId;
-                            addToCart(idImagen, productName, barcodeInput, productPrice1, purchaseUnit);
-                        }
-                    }
-
-
-                    searchInput.value = ""; //delete the value of the input
-                    notificationMessage('❤️ ' + productName + ' ❤️', 'El producto fue agregado con éxito 😁');
-                } else {
-                    notificationMessageError('😬 Ups!', 'Este articulo no se encuentra en el menu.');
-                }
-            }
-        });
-    });
-</script>
 
 
 <!---this is the information for orden of send--->
@@ -460,29 +135,6 @@
 <script src="/js/search.js"></script>
 <script src="/js/store/cashMovement.js"></script>
 <script src="/js/store/return.js"></script>
-<script>
-
-    // Función para ajustar dinámicamente la clase de los elementos con la clase "container-combo"
-    function adjustDivClass() {
-        // Obtén todos los elementos con la clase "container-combo"
-        const divElements = document.querySelectorAll('.container-combo');
-
-        // Itera sobre cada elemento
-        divElements.forEach(function (element) {
-            if (window.innerWidth <= 1500) { // Si el ancho de la ventana es menor o igual a 500px
-                element.classList.remove('col-3'); // Elimina la clase col-3
-                element.classList.add('col-5'); // Agrega la clase col-5
-            } else {
-                element.classList.remove('col-5'); // Elimina la clase col-5
-                element.classList.add('col-3'); // Agrega la clase col-3
-            }
-        });
-    }
-
-    // Llama a la función al cargar la página y cuando se redimensione la ventana
-    window.onload = adjustDivClass;
-    window.onresize = adjustDivClass;
-</script>
 
 
 
@@ -513,8 +165,3 @@
 
 <script src="/js/point of sale/cashMovement.js"></script>
 <script src="/js/point of sale/return.js"></script>
-
-<!---js for print tickets--->
-<script src="/js/point of sale/JQuery.js"></script>
-<script src="/js/point of sale/escops.js"></script>
-<script src="/js/point of sale/tickets.js"></script>
