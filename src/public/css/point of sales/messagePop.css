@@ -114,6 +114,12 @@ h2 {
     }
 }
 
+@media (max-width: 1200px) {
+    .modal-content {
+        width: 60%;
+    }
+}
+
 @media (max-width: 768px) {
     .modal-content {
         width: 100%;
