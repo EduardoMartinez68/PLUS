@@ -25,8 +25,11 @@ router.get('/:id_company/:id_branch/permission_denied', (req, res) => {
 
 router.get('/home', (req, res) => {
     const myApps=apps.get_all_my_apps(req.user);
-    console.log(req.user)
     res.render('links/home',{myApps});
+})
+
+router.get('/install-desktop', (req, res) => {
+    res.redirect('/links/login');
 })
 
 //*-----------------------------------------------------------routes of the apps-----------------------------------------//
