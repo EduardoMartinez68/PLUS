@@ -256,7 +256,7 @@
                     oninput="calculateChange()" class="input-pop-sales">
             </div>
             <p class="change" id="change">Cambio: $0.00</p>
-            <button class="button-pop-sales pay-btn">Cobrar</button>
+            <button class="button-pop-sales pay-btn" onclick="buy_my_car()">Cobrar</button>
         </div>
     </div>
 </div>
@@ -266,6 +266,10 @@
     let finalTotal=0;
 
     function openPopSales() {
+        //forever that the user open the UI, the default input is the cash
+        setSelected(document.getElementById('cash'));
+
+        //get the total of the shopping cart
         const totalText = document.getElementById('cart-total').textContent.trim(); // Elimina espacios extra
         const total = parseFloat(totalText.replace(/[^0-9.]/g, '')); // Elimina caracteres no numéricos
         const formattedTotal = total.toFixed(2); // String con 2 decimales
@@ -281,7 +285,16 @@
     }
 
     function closePopSales() {
+        //restart the inputs
+        if (selectedInput) {
+            selectedInput.classList.remove('selected');
+        }
+        document.getElementById('cash').value='';
+        document.getElementById('debit').value='';
+        document.getElementById('credit').value='';
         selectedInput=null;
+
+        //close the pop
         finalTotal=0;
         document.getElementById('popupOverlay').classList.remove('active');
     }

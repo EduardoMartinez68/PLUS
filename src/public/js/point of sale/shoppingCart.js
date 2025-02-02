@@ -1,7 +1,167 @@
+const loadingOverlay = document.getElementById("loadingOverlay");
 const cartItems = [];
 let cartTotal = 0;
 
-async function addToCart(img, name, barcode, price, purchaseUnit, this_product_is_sold_in_bulk) {
+
+async function buy_my_car() {
+    //get the price of the car with all the combo
+    const cash = document.getElementById('cash').value;
+    const credit = document.getElementById('credit').value;
+    const debit = document.getElementById('debit').value;
+    const moneyReceived=cash+credit+debit;
+    const total = parseFloat(document.getElementById('total').textContent);
+    const change=moneyReceived-total;
+
+    //we will see if the user can buy all the shooping cart
+    if (change>=0) {
+        //we will to get the email of the client 
+        //const emailClient = document.getElementById('emailClient').textContent;
+        const comment='';
+        
+        //we will see if the user can buy all the shooping cart
+        if(await send_buy_to_the_server(total,moneyReceived,change,comment)){
+            //this is for delete all the shooping cart
+            cartItems.splice(0, cartItems.length); 
+            updateCart(); //update the UI of the shooping cart for delete all the products
+
+            closePopSales(); //close the UI of the shooping cart for that the user get the Purchase money
+
+            //we will playing a effect sound 
+            var sound = new Audio('/effect/buy.mp3');
+            sound.play();
+
+            //we will watching if exist exchange in the buy
+            var text = (change != 0) ? 'Tu Cambio es de ' + change + '💲' : 'Vuelve pronto 😄';
+            confirmationMessage(text, 'Gracias por su compra ❤️');
+
+            //we will print ticket
+            printTicket(total,moneyReceived,change,comment);
+        }
+    }else{
+        errorMessage('ERROR 👁️', 'El dinero no es suficiente para la compra');
+    }
+}
+
+async function send_buy_to_the_server(total,moneyReceived,exchange,comment){
+    // Show loading overlay
+    loadingOverlay.style.display = "flex";
+
+    try {
+        //we will watching if the server can complete the pay and setting the inventory
+        const answerServer = await get_answer_server({products:cartItems,total:total,moneyReceived:moneyReceived,change:exchange,comment:comment},`/links/car-post`);
+
+        //we will see if save the commander 
+        if (!isNaN(answerServer.message)) {
+            return true;
+        } else {
+            //if the server not can complete the pay we going to send a message of error
+            errorMessage('ERROR 👁️', answerServer.message + ' 👉👈');
+            return false;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        errorMessage('ERROR ⚠️', 'Se produjo un error al procesar tu solicitud.');
+        return false;
+    } finally {
+        // Hide loading overlay regardless of success or failure
+        loadingOverlay.style.display = "none";
+    }  
+}
+
+async function get_answer_server(dataToTheServer, link) {
+    try {
+        const url = link;
+        // Configurar la solicitud
+        const options = {
+            method: 'POST', // Puedes usar POST en lugar de GET si necesitas enviar muchos datos
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToTheServer)
+        };
+
+        // Realizar la solicitud y esperar la respuesta
+        const response = await fetch(url, options);
+
+        if (!response.ok) {
+            throw new Error('Error en la solicitud');
+        }
+
+        // Convertir la respuesta a JSON y devolverla
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function delete_all_car(total,moneyReceived,exchange,comment) {
+    /*
+    // Show loading overlay
+    loadingOverlay.style.display = "flex";
+
+    const combos = get_all_combo(total,moneyReceived,exchange,comment);
+
+    try {
+        //get the email and the id of the customer 
+        const button = document.getElementById('emailClient');
+        const idClient = button.getAttribute('idClient');
+
+        //we will print the ticket 
+        const selectElementPrinter = document.getElementById('dataPrinter');
+        const ipPrinter = selectElementPrinter.value;
+
+        //we will see if exist a ip for that not exist a error
+        var link=''
+        if(ipPrinter){
+            link = `/fud/${idClient}/${ipPrinter}/car-post`;
+        }else{
+            link = `/fud/${idClient}/car-post`;
+        }
+
+        //we will watching if the server can complete the pay and setting the inventory
+        const answerServer = await get_answer_server(combos,link);
+
+        //we will see if save the commander 
+        if (!isNaN(answerServer.message)) {
+            //we will see if the user would like do a send to his house 
+            var dataOrder = document.getElementById('customer-name').value;
+            if (dataOrder !== "" && dataOrder !== null){ //we will see if exist information about the order 
+                const idCommander=answerServer.message;
+                const answerServerOrder=await get_answer_server_for_add_order(idCommander);
+            }
+            
+            //we will print ticket
+            printTicket(total,moneyReceived,exchange,comment);
+
+            //restart the email of the customer
+            button.innerHTML = '<i class="fi-icon fi-sr-following"></i> Buscar Cliente';
+            button.setAttribute('idClient', null);
+
+            //we will playing a effect sound 
+            var sound = new Audio('/effect/buy.mp3');
+            sound.play();
+
+            var text = (exchange != 0) ? 'Tu Cambio es de ' + exchange + '💲' : 'Vuelve pronto 😄';
+            confirmationMessage(text, 'Gracias por su compra ❤️'); //we will watching if exist exchange in the buy
+        } else {
+            //if the server not can complete the pay we going to send a message of error
+            errorMessage('ERROR 👁️', answerServer.message + ' 👉👈');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        errorMessage('ERROR 👁️', 'Se produjo un error al procesar su solicitud.');
+    } finally {
+        // Hide loading overlay regardless of success or failure
+        loadingOverlay.style.display = "none";
+    }
+    */
+
+    return true;
+}
+
+async function addToCart(img, name, barcode, price, purchaseUnit, this_product_is_sold_in_bulk,id_dishes_and_combos) {
     const existingItem = cartItems.find(item => item.barcode === barcode);
     if (existingItem) {
         //we will see if the product is sold in bulk
@@ -42,7 +202,8 @@ async function addToCart(img, name, barcode, price, purchaseUnit, this_product_i
             quantity: quantityForSales,
             discount: 0,
             purchaseUnit,
-            this_product_is_sold_in_bulk:this_product_is_sold_in_bulk
+            this_product_is_sold_in_bulk:this_product_is_sold_in_bulk,
+            id_dishes_and_combos:id_dishes_and_combos
         });
 
         notificationMessage(`${name} fue agregado ❤️`, 'El Producto fue agregado correctamente');

@@ -65,33 +65,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 const productPrice1 = parseFloat(cardProduct.querySelector('.card-text').textContent.trim().replace('$', '').replace(',', ''));
                 const productPrice2 = cardProduct.getAttribute('data-price-2') || '0';
                 const productPrice3 = cardProduct.getAttribute('data-price-3') || '0';
-                const typeProduct = cardProduct.querySelector('.this_product_is_sold_in_bulk').value || 'false';
+                const typeProduct = cardProduct.getAttribute('this_product_is_sold_in_bulk');
+                const id_dishes_and_combos = cardProduct.getAttribute('id_dishes_and_combos');
 
                 //we will see if the product that the user would like add to the card is a product is sold in bulk
                 if (typeProduct == 'true') {
-                    // call to the function addFish with the product data
-                    //addFish(productId, productName, productPrice1, productPrice2, productPrice3,typeProduct);
-
-                    addToCart('product-' + productId, productName, barcodeInput, productPrice1);
-
                     //update the cant in the scale
                     repeatCount = parseFloat(match[1], 10); //this is for get decimals
                     document.getElementById('scales-store-weight-input').value = repeatCount;
                     update_weight_of_the_scale();
+
+                    
+                    addToCart('product-' + productId, productName, barcodeInput, productPrice1, purchaseUnit, typeProduct,id_dishes_and_combos) 
                 } else {
                     //if exist a cant that the user would add of the product, we use a loop "for" for add the product to the card
                     for (let i = 0; i < repeatCount; i++) {
                         // call to the function addFish with the product data
-                        //addFish(productId, productName, productPrice1, productPrice2, productPrice3,typeProduct);
-
                         const idImagen = 'product-' + productId;
-                        addToCart(idImagen, productName, barcodeInput, productPrice1, purchaseUnit);
+                        addToCart(idImagen, productName, barcodeInput, productPrice1, purchaseUnit,typeProduct,id_dishes_and_combos);
                     }
                 }
 
-
                 searchInput.value = ""; //delete the value of the input
-                notificationMessage('❤️ ' + productName + ' ❤️', 'El producto fue agregado con éxito 😁');
             } else {
                 notificationMessageError('😬 Ups!', 'Este articulo no se encuentra en el menu.');
             }
