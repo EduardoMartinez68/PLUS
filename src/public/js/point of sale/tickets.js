@@ -59,23 +59,20 @@ const printTicket=(total, receivedMoney,exchange,comment)=>{
         printer.setText('---------------------------------------------\n');
 
         // Extraer datos de la tabla
-        const bodyTable = tabla.getElementsByTagName("tbody")[0];
-        const rows = bodyTable.getElementsByTagName("tr");
-        for (let i = 0; i < rows.length; i++) {
-            const cols = rows[i].getElementsByTagName("td");
-            const producto = cols[0].innerText; // Nombre del producto
-            const cantidad = cols[2].innerText; // Cantidad
-            const precio = cols[1].innerText; // Precio unitario
-            const subtotal = cols[3].innerText; // Subtotal
+        cartItems.forEach(item => {
+            const producto = item.name; // Nombre del producto
+            const cantidad = item.quantity+' '+item.purchaseUnit; // Cantidad
+            const precio = item.price; // Precio unitario
+            const subtotal = item.quantity*precio; // Subtotal
     
             // Formatear las columnas para que queden alineadas
-            const line = `${cantidad.padEnd(6)} ${producto.padEnd(18)} $${precio.padEnd(8)} $${subtotal}\n`;
+            const line = `${cantidad.toString().padEnd(6)} ${producto.padEnd(18)} $${precio.toString().padEnd(8)} $${subtotal.toFixed(2).toString()}\n`;
             ticketContent += line;
     
             printer.setConfigure('left', 'a', false);
             printer.setText(line);
-        }
-    
+        });
+
         // Agregar total, dinero recibido y comentario
         ticketContent += '\n----------------------------\n';
         ticketContent += `Total: $${total}\n`;
